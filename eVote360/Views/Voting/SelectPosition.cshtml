@@ -1,0 +1,101 @@
+@model eVote360.ViewModels.Voting.PositionSelectionViewModel
+
+@{
+    ViewData["Title"] = "Seleccio³n de Posiciones";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-vote-yea"></i> Proceso Electoral: @Model.ElectionName
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <i class="fas fa-exclamation-circle"></i> @TempData["Error"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> 
+                        Seleccione una posicio³n para votar. Debe votar por <strong>todas las posiciones</strong> antes de finalizar.
+                    </div>
+
+                    <div class="row">
+                        @foreach (var position in Model.Positions)
+                        {
+                            <div class="col-md-6 mb-3">
+                                <div class="card @(position.HasVoted ? "border-success" : "border-secondary")">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            @position.PositionName
+                                            @if (position.HasVoted)
+                                            {
+                                                <span class="badge bg-success float-end">
+                                                    <i class="fas fa-check"></i> Votado
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning float-end">
+                                                    <i class="fas fa-clock"></i> Pendiente
+                                                </span>
+                                            }
+                                        </h5>
+                                        <p class="card-text text-muted">
+                                            @if (position.HasVoted)
+                                            {
+                                                <span>Ya ha emitido su voto para esta posicio³n.</span>
+                                            }
+                                            else
+                                            {
+                                                <span>Seleccione un candidato para esta posicio³n.</span>
+                                            }
+                                        </p>
+                                        <a asp-action="SelectCandidate" 
+                                           asp-route-positionId="@position.PositionId" 
+                                           class="btn @(position.HasVoted ? "btn-outline-primary" : "btn-primary") w-100">
+                                            <i class="fas @(position.HasVoted ? "fa-edit" : "fa-hand-pointer")"></i> 
+                                            @(position.HasVoted ? "Cambiar Voto" : "Seleccionar Candidato")
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        @{
+                            var allVoted = Model.Positions.All(p => p.HasVoted);
+                        }
+                        
+                        @if (allVoted)
+                        {
+                            <a asp-action="Confirm" class="btn btn-success btn-lg">
+                                <i class="fas fa-check-double"></i> Revisar y Confirmar Votos
+                            </a>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-secondary btn-lg" disabled>
+                                <i class="fas fa-check-double"></i> Complete todos los votos para continuar
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card.border-success {
+        box-shadow: 0 0 10px rgba(25, 135, 84, 0.3);
+    }
+</style>

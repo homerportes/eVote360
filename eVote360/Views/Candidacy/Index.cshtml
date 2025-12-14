@@ -1,0 +1,88 @@
+@model List<eVote360.Application.ViewModels.Candidacy.CandidacyViewModel>
+@{
+    ViewData["Title"] = "Assign Candidates to Positions";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>@ViewData["Title"]</h2>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> New Assignment
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> No candidacies found. Start by assigning candidates to elective positions.
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Candidate</th>
+                                <th>Elective Position</th>
+                                <th>Type</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <i class="bi bi-person-fill me-2"></i>@item.CandidateFullName
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">@item.ElectivePositionName</span>
+                                    </td>
+                                    <td>
+                                        @if (item.IsAlliance)
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="bi bi-link-45deg"></i> Alliance
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-house-fill"></i> Own Party
+                                            </span>
+                                        }
+                                    </td>
+                                    <td class="text-end">
+                                        <a asp-action="Delete" asp-route-id="@item.Id" 
+                                           class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash"></i> Remove
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>

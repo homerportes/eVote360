@@ -1,0 +1,45 @@
+@using eVote360.Application.ViewModels.Candidate
+@model ConfirmCandidateActionViewModel
+
+@{
+    bool isActivating = !Model.IsActive;
+    string actionText = isActivating ? "activate" : "deactivate";
+    string title = isActivating ? "Activate Candidate" : "Deactivate Candidate";
+    string btnClass = isActivating ? "btn-success" : "btn-danger";
+}
+
+<div class="col-12 col-md-6 offset-md-3 mt-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-warning text-dark text-center">
+            <h5>@title</h5>
+        </div>
+
+        <div class="card-body text-center">
+            <p class="lead mb-3">Are you sure you want to @actionText this candidate?</p>
+
+            @if (!string.IsNullOrEmpty(Model.PhotoUrl))
+            {
+                <div class="mb-3">
+                    <img src="~/@Model.PhotoUrl" alt="@Model.FullName" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                </div>
+            }
+
+            <p>
+                <strong>@Model.FullName</strong>
+            </p>
+
+            <form asp-controller="Candidate" asp-action="@(isActivating ? "Activate" : "Deactivate")" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+
+                <div class="d-flex justify-content-center gap-2 mt-4">
+                    <button type="submit" class="btn @btnClass px-4">
+                        <i class="bi bi-check-circle me-1"></i>Confirm
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary px-4">
+                        <i class="bi bi-x-circle me-1"></i>Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

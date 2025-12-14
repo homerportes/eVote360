@@ -1,0 +1,208 @@
+@model eVote360.Application.ViewModels.HomeAdmin.HomeAdminIndexViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="display-4 text-primary">
+                <i class="bi bi-shield-lock-fill me-3"></i>Administrator Dashboard
+            </h1>
+            <p class="lead text-muted">Welcome to the eVote360 administration panel</p>
+            <hr class="my-4">
+        </div>
+    </div>
+
+    <!-- Electoral Summary Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-bar-chart-fill me-2"></i>Electoral Summary
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (Model.AvailableYears.Any())
+                    {
+                        <form asp-controller="HomeAdmin" asp-action="Index" method="get" class="mb-4">
+                            <div class="row align-items-end">
+                                <div class="col-md-6">
+                                    <label for="year" class="form-label fw-bold">
+                                        <i class="bi bi-calendar-event me-2"></i>Select Year:
+                                    </label>
+                                    <select name="year" id="year" class="form-select" onchange="this.form.submit()">
+                                        @foreach (var year in Model.AvailableYears)
+                                        {
+                                            <option value="@year" selected="@(year == Model.SelectedYear)">@year</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-search me-2"></i>Get Electoral Summary
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                        @if (Model.ElectionSummaries.Any())
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-hover table-bordered align-middle">
+                                    <thead class="table-primary">
+                                        <tr>
+                                            <th><i class="bi bi-trophy me-2"></i>Election Name</th>
+                                            <th><i class="bi bi-calendar-date me-2"></i>Date</th>
+                                            <th class="text-center"><i class="bi bi-flag me-2"></i>Parties</th>
+                                            <th class="text-center"><i class="bi bi-person-badge me-2"></i>Candidates</th>
+                                            <th class="text-center"><i class="bi bi-check-circle me-2"></i>Total Votes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var summary in Model.ElectionSummaries)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <strong>@summary.ElectionName</strong>
+                                                </td>
+                                                <td>
+                                                    @summary.ElectionDate.ToString("dd/MM/yyyy")
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge bg-info fs-6">@summary.TotalParties</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge bg-success fs-6">@summary.TotalCandidates</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge bg-primary fs-6">@summary.TotalVotes</span>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning" role="alert">
+                                <i class="bi bi-exclamation-triangle me-2"></i>
+                                No elections found for the year <strong>@Model.SelectedYear</strong>.
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-info" role="alert">
+                            <i class="bi bi-info-circle me-2"></i>
+                            No elections have been created yet. Create your first election to see the summary.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Access Cards -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3 class="text-secondary">
+                <i class="bi bi-grid-3x3-gap-fill me-2"></i>Quick Access
+            </h3>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-primary">
+                <div class="card-body text-center">
+                    <i class="bi bi-award-fill text-primary" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">Elective Positions</h5>
+                    <p class="card-text text-muted">Manage electoral positions and configure elections</p>
+                    <a asp-controller="ElectivePosition" asp-action="Index" class="btn btn-primary">
+                        <i class="bi bi-gear-fill me-2"></i>Manage
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-success">
+                <div class="card-body text-center">
+                    <i class="bi bi-flag-fill text-success" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">Political Parties</h5>
+                    <p class="card-text text-muted">Register and manage political parties</p>
+                    <a asp-controller="PoliticalParty" asp-action="Index" class="btn btn-success">
+                        <i class="bi bi-gear-fill me-2"></i>Manage
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-info">
+                <div class="card-body text-center">
+                    <i class="bi bi-people-fill text-info" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">System Users</h5>
+                    <p class="card-text text-muted">Create and manage administrator and dirigente users</p>
+                    <a asp-controller="User" asp-action="Index" class="btn btn-info">
+                        <i class="bi bi-gear-fill me-2"></i>Manage
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-warning">
+                <div class="card-body text-center">
+                    <i class="bi bi-person-badge-fill text-warning" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">Citizens</h5>
+                    <p class="card-text text-muted">Register and manage citizen information</p>
+                    <a asp-controller="Citizen" asp-action="Index" class="btn btn-warning">
+                        <i class="bi bi-gear-fill me-2"></i>Manage
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-danger">
+                <div class="card-body text-center">
+                    <i class="bi bi-person-vcard-fill text-danger" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">Candidates</h5>
+                    <p class="card-text text-muted">Manage candidates and their information</p>
+                    <a asp-controller="Candidate" asp-action="Index" class="btn btn-danger">
+                        <i class="bi bi-gear-fill me-2"></i>Manage
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 border-secondary">
+                <div class="card-body text-center">
+                    <i class="bi bi-clipboard-data-fill text-secondary" style="font-size: 3rem;"></i>
+                    <h5 class="card-title mt-3">Reports</h5>
+                    <p class="card-text text-muted">View statistics and generate reports</p>
+                    <button class="btn btn-secondary" disabled>
+                        <i class="bi bi-hourglass-split me-2"></i>Coming Soon
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="alert alert-info" role="alert">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                <strong>Welcome!</strong> You have full access to all system modules. Use the navigation menu above or the cards to access each section.
+            </div>
+        </div>
+    </div>
+</div>

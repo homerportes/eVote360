@@ -1,0 +1,69 @@
+@model eVote360.Application.ViewModels.PoliticalParty.SavePoliticalPartyViewModel
+@{
+    bool editMode = ViewBag.EditMode ?? false;
+    ViewData["Title"] = editMode ? "Edit Political Party" : "New Political Party";
+}
+
+<div class="container mt-4">
+    <div class="col-12 col-md-8 offset-md-2">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h5 class="text-center mb-0">
+                    @(editMode ? $"Edit - {Model.Name}" : "Create New Political Party")
+                </h5>
+            </div>
+
+            <div class="card-body">
+                <form asp-controller="PoliticalParty" asp-action="@(editMode ? "Edit" : "Create")"
+                      method="post" enctype="multipart/form-data">
+
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">Name</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Acronym" class="form-label">Acronym</label>
+                        <input asp-for="Acronym" class="form-control" />
+                        <span asp-validation-for="Acronym" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label">Description</label>
+                        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Party Logo</label>
+                        <input type="file" name="LogoFile" class="form-control" />
+
+                        @if (!string.IsNullOrWhiteSpace(Model.LogoUrl))
+                        {
+                            <div class="mt-2">
+                                <img src="~/@Model.LogoUrl" alt="Logo" class="rounded shadow-sm" style="max-height: 120px;" />
+                            </div>
+                        }
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input asp-for="IsActive" class="form-check-input" />
+                        <label asp-for="IsActive" class="form-check-label">Active</label>
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-4">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-floppy2"></i> @(editMode ? "Update" : "Save")
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary ms-2">
+                            <i class="bi bi-arrow-left-short"></i> Back
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

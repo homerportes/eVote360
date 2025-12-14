@@ -1,0 +1,103 @@
+@model List<eVote360.Application.ViewModels.PoliticalParty.PoliticalPartyViewModel>
+@{
+    ViewData["Title"] = "Political Parties";
+}
+
+<div class="container mt-4">
+
+    <!-- Alert messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Header and new party button -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-success fw-bold">Political Parties</h2>
+        <a asp-controller="PoliticalParty" asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> New Party
+        </a>
+    </div>
+
+    <!-- If there are no parties -->
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info text-center shadow-sm">
+            No political parties registered yet.
+        </div>
+    }
+    else
+    {
+        <!-- Table with party list -->
+        <table class="table table-hover align-middle shadow-sm">
+            <thead class="table-success">
+                <tr>
+                    <th style="width: 10%">Logo</th>
+                    <th>Name</th>
+                    <th>Acronym</th>
+                    <th>Description</th>
+                    <th style="width: 10%">Active</th>
+                    <th style="width: 20%">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (!string.IsNullOrWhiteSpace(item.LogoUrl))
+                            {
+                                <img src="~/@item.LogoUrl" alt="Logo" style="max-height:50px" class="rounded shadow-sm" />
+                            }
+                            else
+                            {
+                                <span class="text-muted">No Logo</span>
+                            }
+                        </td>
+                        <td>@item.Name</td>
+                        <td>@item.Acronym</td>
+                        <td>@item.Description</td>
+                        <td>
+                            <span class="badge @(item.IsActive ? "bg-success" : "bg-danger")">
+                                @(item.IsActive ? "Active" : "Inactive")
+                            </span>
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <!-- Edit -->
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm text-white">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+
+                                <!-- Activate / Deactivate -->
+                                @if (item.IsActive)
+                                {
+                                    <a asp-action="Deactivate" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm">
+                                        <i class="bi bi-slash-circle"></i> Deactivate
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-action="Activate" asp-route-id="@item.Id" class="btn btn-outline-success btn-sm">
+                                        <i class="bi bi-check-circle"></i> Activate
+                                    </a>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

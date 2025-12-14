@@ -1,0 +1,35 @@
+@model eVote360.Application.ViewModels.PoliticalParty.ConfirmPoliticalPartyActionViewModel
+
+@{
+    var isActivating = !Model.IsActive;
+    var actionText = isActivating ? "activate" : "deactivate";
+    var title = isActivating ? "Activate Political Party" : "Deactivate Political Party";
+    var btnClass = isActivating ? "btn-success" : "btn-danger";
+    var icon = isActivating ? "bi-check-circle" : "bi-slash-circle";
+}
+
+<div class="container mt-5">
+    <div class="col-12 col-md-6 offset-md-3">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="text-center">@title</h5>
+            </div>
+            <div class="card-body text-center">
+                <p class="lead mb-3">Are you sure you want to @actionText this political party?</p>
+                <h5 class="fw-bold text-dark">@Model.Name</h5>
+
+                <form asp-controller="PoliticalParty" asp-action="@(isActivating ? "Activate" : "Deactivate")" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+
+                    <button type="submit" class="btn @btnClass me-2">
+                        <i class="bi @icon"></i> Confirm
+                    </button>
+
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left-short"></i> Cancel
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

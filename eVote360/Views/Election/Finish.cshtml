@@ -1,0 +1,42 @@
+@model eVote360.Application.ViewModels.Election.FinishElectionViewModel
+@{
+    ViewData["Title"] = "Finalizar ElecciÃ³n";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0"><i class="bi bi-exclamation-triangle"></i> Confirmar FinalizaciÃ³n</h4>
+                </div>
+                <div class="card-body text-center">
+                    <i class="bi bi-question-circle text-warning" style="font-size: 4rem;"></i>
+                    <h3 class="mt-3">Â¿EstÃ¡ seguro que desea finalizar esta elecciÃ³n?</h3>
+                    
+                    <div class="alert alert-warning mt-4">
+                        <p class="mb-2"><strong>ElecciÃ³n:</strong> @Model.Name</p>
+                        <p class="mb-0"><strong>Fecha:</strong> @Model.Date.ToString("dd/MM/yyyy")</p>
+                    </div>
+
+                    <p class="text-muted mt-3">
+                        Una vez finalizada, la elecciÃ³n no podrÃ¡ ser modificada y se podrÃ¡n visualizar los resultados.
+                    </p>
+
+                    <form asp-action="FinishConfirmed" method="post" class="mt-4">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        
+                        <div class="d-flex justify-content-center gap-3">
+                            <a asp-action="Index" class="btn btn-secondary btn-lg">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-danger btn-lg">
+                                <i class="bi bi-check-circle"></i> Aceptar y Finalizar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

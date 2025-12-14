@@ -1,0 +1,27 @@
+@using eVote360.Application.Helpers
+@using eVote360.Application.ViewModels.User
+@{
+    var userSession = Context.Session.Get<UserViewModel>("User");
+    
+    if (userSession != null)
+    {
+        // Usuario autenticado - seleccionar layout según rol
+        if (userSession.Role == 1) // Administrator
+        {
+            Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+        }
+        else if (userSession.Role == 2) // Dirigente
+        {
+            Layout = "~/Views/Shared/_LayoutDirigente.cshtml";
+        }
+        else
+        {
+            Layout = "~/Views/Shared/_Layout.cshtml";
+        }
+    }
+    else
+    {
+        // Usuario no autenticado - layout público
+        Layout = "~/Views/Shared/_LayoutPublic.cshtml";
+    }
+}

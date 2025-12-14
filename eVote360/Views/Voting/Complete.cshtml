@@ -1,0 +1,83 @@
+@{
+    ViewData["Title"] = "Votación Exitosa";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-success">
+                <div class="card-header bg-success text-white text-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-check-circle fa-2x mb-3"></i>
+                        <br />
+                        Votación Registrada Exitosamente
+                    </h4>
+                </div>
+                <div class="card-body text-center">
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-double"></i> @TempData["Success"]
+                        </div>
+                    }
+
+                    <p class="lead mt-4">
+                        Agradecemos su participación en este proceso democrático.
+                    </p>
+
+                    <p>
+                        Su voto ha sido registrado de manera segura y confidencial.
+                    </p>
+
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-envelope"></i> 
+                        <strong>Confirmación por Correo Electrónico</strong>
+                        <p class="mb-0 mt-2 small">
+                            Recibirá un correo electrónico con el resumen detallado de su votación, 
+                            incluyendo la fecha, hora y los candidatos seleccionados para cada puesto electivo.
+                            <br>
+                            <em>Por favor, revise su bandeja de entrada. Si no lo encuentra, verifique la carpeta de correo no deseado.</em>
+                        </p>
+                    </div>
+
+                    <div class="card mt-4 bg-light">
+                        <div class="card-body">
+                            <h6 class="card-title"><i class="fas fa-info-circle"></i> Información Importante</h6>
+                            <ul class="text-start small">
+                                <li>Su voto ha sido registrado de forma segura, encriptado y anónimo</li>
+                                <li>Votación realizada el: <strong>@DateTime.Now.ToString("dd/MM/yyyy HH:mm")</strong></li>
+                                <li>Puede cerrar esta ventana de forma segura</li>
+                                <li>No podrá votar nuevamente en este proceso electoral</li>
+                                <li>Los resultados oficiales serán publicados al finalizar el período electoral</li>
+                                <li>Conserve el correo de confirmación para sus registros</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-lg">
+                            <i class="fas fa-home"></i> Ir al Inicio
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4 text-muted">
+                <small>
+                    <i class="fas fa-lock"></i> Sistema Electoral Seguro - eVote360
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .fa-check-circle {
+        animation: fadeIn 1s ease-in;
+    }
+    
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.5); }
+        to { opacity: 1; transform: scale(1); }
+    }
+</style>

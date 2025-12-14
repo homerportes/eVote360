@@ -1,0 +1,45 @@
+@model eVote360.Application.ViewModels.PartyLeaderAssignment.DeletePartyLeaderAssignmentViewModel
+@{
+    ViewData["Title"] = "Remove Party Leader Assignment";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">@ViewData["Title"]</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <strong>Are you sure you want to unassign this political leader from this party?</strong>
+                    </div>
+
+                    <dl class="row">
+                        <dt class="col-sm-4">Political Leader:</dt>
+                        <dd class="col-sm-8">@Model.UserFullName</dd>
+
+                        <dt class="col-sm-4">Political Party:</dt>
+                        <dd class="col-sm-8">
+                            @Model.PartyName <span class="badge bg-info">@Model.PartyAcronym</span>
+                        </dd>
+                    </dl>
+
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="UserId" />
+                        
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-check-circle"></i> Confirm
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

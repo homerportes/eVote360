@@ -1,0 +1,51 @@
+@model eVote360.Application.ViewModels.PartyLeaderAssignment.CreatePartyLeaderAssignmentViewModel
+@{
+    ViewData["Title"] = "Assign Political Leader to Party";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">@ViewData["Title"]</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div class="mb-3">
+                            <label asp-for="UserId" class="form-label">Political Leader</label>
+                            <select asp-for="UserId" class="form-select" asp-items="ViewBag.Users">
+                                <option value="0">-- Select Political Leader --</option>
+                            </select>
+                            <span asp-validation-for="UserId" class="text-danger"></span>
+                            <div class="form-text">
+                                Only political leaders without a party assignment are shown.
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="PartyId" class="form-label">Political Party</label>
+                            <select asp-for="PartyId" class="form-select" asp-items="ViewBag.Parties">
+                                <option value="0">-- Select Party --</option>
+                            </select>
+                            <span asp-validation-for="PartyId" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Back to List
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> Assign
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

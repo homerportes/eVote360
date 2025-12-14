@@ -1,0 +1,82 @@
+@model dynamic
+@{
+    bool editMode = ViewBag.EditMode ?? false;
+    ViewData["Title"] = editMode ? "Edit Candidate" : "Create Candidate";
+    string currentPhotoUrl = "";
+    
+    if (editMode)
+    {
+        var updateModel = Model as eVote360.Application.ViewModels.Candidate.UpdateCandidateViewModel;
+        currentPhotoUrl = updateModel?.CurrentPhotoUrl ?? "";
+    }
+}
+
+<div class="container mt-4">
+    <div class="col-12 col-md-8 offset-md-2">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white text-center">
+                <h5>@ViewData["Title"]</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="@(editMode ? "Edit" : "Create")" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="Id" value="@Model.Id" />
+                    
+                    @if (editMode)
+                    {
+                        <input type="hidden" name="CurrentPhotoUrl" value="@currentPhotoUrl" />
+                        
+                        @if (!string.IsNullOrEmpty(currentPhotoUrl))
+                        {
+                            <div class="mb-3 text-center">
+                                <label class="form-label">Current Photo</label>
+                                <div>
+                                    <img src="~/@currentPhotoUrl" alt="Current photo" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    <div class="mb-3">
+                        <label for="CitizenId" class="form-label">Citizen</label>
+                        <select name="CitizenId" id="CitizenId" class="form-select" asp-items="@ViewBag.Citizens">
+                            <option value="">-- Select Citizen --</option>
+                        </select>
+                        <span class="text-danger field-validation-valid" data-valmsg-for="CitizenId" data-valmsg-replace="true"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="PartyId" class="form-label">Political Party</label>
+                        <select name="PartyId" id="PartyId" class="form-select" asp-items="@ViewBag.Parties">
+                            <option value="">-- Select Party --</option>
+                        </select>
+                        <span class="text-danger field-validation-valid" data-valmsg-for="PartyId" data-valmsg-replace="true"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Photo" class="form-label">
+                            @(editMode ? "Photo (Optional - leave empty to keep current)" : "Photo")
+                        </label>
+                        <input name="Photo" id="Photo" class="form-control" type="file" accept="image/*" />
+                        <span class="text-danger field-validation-valid" data-valmsg-for="Photo" data-valmsg-replace="true"></span>
+                        <small class="form-text text-muted">Accepted formats: JPG, PNG, GIF. Max size: 5MB</small>
+                    </div>
+                    
+                    <input type="hidden" name="IsActive" value="true" />
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-circle me-1"></i>@(editMode ? "Update" : "Create")
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary ms-2">
+                            <i class="bi bi-x-circle me-1"></i>Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

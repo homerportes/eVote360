@@ -1,0 +1,39 @@
+@using eVote360.Application.ViewModels.User
+@model ConfirmUserActionViewModel
+
+@{
+    bool isActivating = !Model.IsActive;
+    string actionText = isActivating ? "activate" : "deactivate";
+    string title = isActivating ? "Activate User" : "Deactivate User";
+    string btnClass = isActivating ? "btn-success" : "btn-danger";
+}
+
+<div class="col-12 col-md-6 offset-md-3 mt-4">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-warning text-dark text-center">
+            <h5>@title</h5>
+        </div>
+
+        <div class="card-body text-center">
+            <p class="lead mb-3">Are you sure you want to @actionText this user?</p>
+
+            <p>
+                <strong>@Model.FirstName @Model.LastName</strong><br />
+                <small class="text-muted">@Model.Email</small>
+            </p>
+
+            <form asp-controller="User" asp-action="@(isActivating ? "Activate" : "Deactivate")" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+
+                <div class="d-flex justify-content-center gap-2 mt-4">
+                    <button type="submit" class="btn @btnClass px-4">
+                        Confirm
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary px-4">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

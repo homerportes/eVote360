@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.14.1" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.10" />
+    <PackageReference Include="MimeKit" Version="4.14.0" />
+    <PackageReference Include="Tesseract" Version="5.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\eVote360.Application\eVote360.Application.csproj" />
+    <ProjectReference Include="..\eVote360.Domain\eVote360.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

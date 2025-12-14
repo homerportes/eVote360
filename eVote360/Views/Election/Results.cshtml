@@ -1,0 +1,126 @@
+@model eVote360.Application.DTOs.Election.ElectionResultDTO
+@{
+    ViewData["Title"] = "Resultados de la ElecciÃ³n";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2><i class="bi bi-trophy text-warning"></i> @ViewData["Title"]</h2>
+            <p class="text-muted mb-0">@Model.ElectionName - @Model.ElectionDate.ToString("dd/MM/yyyy")</p>
+        </div>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver al Listado
+        </a>
+    </div>
+
+    @if (Model.PositionResults.Count == 0)
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> No hay resultados disponibles para esta elecciÃ³n.
+        </div>
+    }
+    else
+    {
+        @foreach (var position in Model.PositionResults)
+        {
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-briefcase"></i> @position.PositionName
+                    </h4>
+                    <small>Total de votos emitidos: @position.TotalVotes</small>
+                </div>
+                <div class="card-body">
+                    @if (position.CandidateResults.Count == 0)
+                    {
+                        <p class="text-muted">No hay candidatos para este puesto.</p>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>PosiciÃ³n</th>
+                                        <th>Candidato</th>
+                                        <th>Partido</th>
+                                        <th>Votos Recibidos</th>
+                                        <th>Porcentaje</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < position.CandidateResults.Count; i++)
+                                    {
+                                        var candidate = position.CandidateResults[i];
+                                        var isWinner = i == 0;
+                                        var isBlankVote = candidate.CandidateId == 0;
+                                        <tr class="@(isWinner && !isBlankVote ? "table-success" : "")">
+                                            <td>
+                                                @if (isWinner && !isBlankVote)
+                                                {
+                                                    <span class="badge bg-success">
+                                                        <i class="bi bi-trophy-fill"></i> #@(i + 1)
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">#@(i + 1)</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (isBlankVote)
+                                                {
+                                                    <em class="text-muted">@candidate.CandidateName</em>
+                                                }
+                                                else if (isWinner)
+                                                {
+                                                    <strong class="text-success">@candidate.CandidateName</strong>
+                                                }
+                                                else
+                                                {
+                                                    @candidate.CandidateName
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (isBlankVote)
+                                                {
+                                                    <span class="badge bg-secondary" title="@candidate.PartyName">
+                                                        @candidate.PartyAcronym
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-primary" title="@candidate.PartyName">
+                                                        @candidate.PartyAcronym
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <strong>@candidate.VotesReceived</strong> votos
+                                            </td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="progress flex-grow-1 me-2" style="height: 25px;">
+                                                        <div class="progress-bar @(isWinner && !isBlankVote ? "bg-success" : isBlankVote ? "bg-secondary" : "bg-primary")" 
+                                                             role="progressbar" 
+                                                             style="width: @candidate.VotePercentage%"
+                                                             aria-valuenow="@candidate.VotePercentage" 
+                                                             aria-valuemin="0" 
+                                                             aria-valuemax="100">
+                                                            <strong>@candidate.VotePercentage%</strong>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    }
+</div>

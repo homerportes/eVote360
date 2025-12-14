@@ -1,0 +1,89 @@
+@model List<eVote360.Application.ViewModels.Candidate.CandidateViewModel>
+@{
+    ViewData["Title"] = "Candidate Management";
+}
+
+<div class="container mt-4">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="d-flex justify-content-between mb-3">
+        <h2 class="text-success">Candidates</h2>
+        <a asp-action="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> New Candidate
+        </a>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            No candidates registered yet.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var candidate in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        @if (!string.IsNullOrEmpty(candidate.PhotoUrl))
+                        {
+                            <img src="~/@candidate.PhotoUrl" class="card-img-top" alt="@candidate.FullName" style="height: 250px; object-fit: cover;">
+                        }
+                        else
+                        {
+                            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 250px;">
+                                <i class="bi bi-person-circle text-white" style="font-size: 100px;"></i>
+                            </div>
+                        }
+                        
+                        <div class="card-body">
+                            <h5 class="card-title">@candidate.FullName</h5>
+                            <p class="card-text">
+                                <strong>Party:</strong> @candidate.PartyName (@candidate.PartyAcronym)<br />
+                                <strong>Position:</strong> @candidate.ElectivePositionName<br />
+                                <span class="badge @(candidate.IsActive ? "bg-success" : "bg-danger") mt-2">
+                                    @(candidate.IsActive ? "Active" : "Inactive")
+                                </span>
+                            </p>
+                        </div>
+                        
+                        <div class="card-footer bg-white">
+                            <div class="d-flex gap-2 justify-content-center">
+                                <a asp-action="Edit" asp-route-id="@candidate.Id" class="btn btn-warning btn-sm text-white">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+
+                                @if (candidate.IsActive)
+                                {
+                                    <a asp-action="Deactivate" asp-route-id="@candidate.Id" class="btn btn-outline-danger btn-sm">
+                                        <i class="bi bi-slash-circle"></i> Deactivate
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-action="Activate" asp-route-id="@candidate.Id" class="btn btn-outline-success btn-sm">
+                                        <i class="bi bi-check-circle"></i> Activate
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
